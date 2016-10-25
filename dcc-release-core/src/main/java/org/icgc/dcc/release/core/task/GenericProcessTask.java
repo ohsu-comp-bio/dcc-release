@@ -45,7 +45,7 @@ public abstract class GenericProcessTask extends GenericTask {
   @Override
   public void execute(TaskContext taskContext) {
     if (!hasInput(taskContext)) {
-      log.info("[{}] No input for '{}' and output '{}'. Skipping...", getName(), inputFileType, outputFileType);
+      log.info("bwalsh says that ... [{}] No input for '{}' and output '{}'. Skipping...", getName(), inputFileType, outputFileType);
       return;
     }
 

@@ -59,6 +59,10 @@ import org.joda.time.DateTime;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.primitives.Ints;
 
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 @RequiredArgsConstructor
 public class ReleaseSummarizeTask extends GenericTask {
 
@@ -118,6 +122,10 @@ public class ReleaseSummarizeTask extends GenericTask {
   }
 
   private static long getReleaseSpecimenCount(JavaRDD<ObjectNode> projects) {
+    log.info("bwalsh projects'{}'...", projects);
+    //log.info("bwalsh o.get(PROJECT_SUMMARY)'{}'...", projects.get(PROJECT_SUMMARY));
+    //log.info("bwalsh o.get(PROJECT_SUMMARY).get(TOTAL_SPECIMEN_COUNT) '{}'...", projects.get(PROJECT_SUMMARY).get(TOTAL_SPECIMEN_COUNT));
+
     return projects
         .map(o -> o.get(PROJECT_SUMMARY).get(TOTAL_SPECIMEN_COUNT).asLong())
         .reduce((a, b) -> a + b);

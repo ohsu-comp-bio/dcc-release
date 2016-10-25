@@ -21,6 +21,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import lombok.NonNull;
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.id.client.core.IdClientFactory;
 import org.icgc.dcc.id.client.http.HttpIdClient;
@@ -37,6 +38,7 @@ import org.icgc.dcc.release.job.id.task.AddSurrogateSpecimenIdTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class IdJob extends GenericJob {
 
@@ -58,6 +60,7 @@ public class IdJob extends GenericJob {
 
   @Override
   public void execute(@NonNull JobContext jobContext) {
+    log.info("IdProperties: {}", identifierProperties);
     clean(jobContext);
     id(jobContext);
   }

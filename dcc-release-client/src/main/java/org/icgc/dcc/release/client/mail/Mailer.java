@@ -82,12 +82,13 @@ public class Mailer {
   @SneakyThrows
   private void sendFailed(String templateName, Map<String, ?> of, Exception e) {
     // TODO: Format nicely
-    val message = new MimeMessageHelper(mailSender.createMimeMessage(), true, UTF_8.name());
-    message.setSubject(createSubject(templateName));
-    message.setText("<h1>ERROR</h1><br><pre>" + e.toString() + "</pre>", true);
-    message.setTo(mail.getRecipients());
+    log.info("Skip sending failure email.");
+    //val message = new MimeMessageHelper(mailSender.createMimeMessage(), true, UTF_8.name());
+    //message.setSubject(createSubject(templateName));
+    //message.setText("<h1>ERROR</h1><br><pre>" + e.toString() + "</pre>", true);
+    //message.setTo(mail.getRecipients());
 
-    mailSender.send(message.getMimeMessage());
+    //mailSender.send(message.getMimeMessage());
   }
 
   @SneakyThrows
@@ -96,9 +97,9 @@ public class Mailer {
     val subject = createSubject(templateName);
     val mimeMessage = createMimeMessage(subject, body);
 
-    log.info("Sending...");
-    mailSender.send(mimeMessage);
-    log.info("Sent: '{}'", mimeMessage.getSubject());
+    log.info("Skip sending success email.");
+    //mailSender.send(mimeMessage);
+    //log.info("Sent: '{}'", mimeMessage.getSubject());
   }
 
   private String createSubject(String templateName) {

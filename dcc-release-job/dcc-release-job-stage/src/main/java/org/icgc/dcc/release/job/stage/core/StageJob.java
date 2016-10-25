@@ -73,15 +73,18 @@ public class StageJob implements Job {
     int taskCount = 0;
     val schemaProjectTasks = ImmutableList.<Task> builder();
 
+    log.info("createStagingTasks...");
     for (val schemaName : files.rowKeySet()) {
       val schema = schemas.get(schemaName);
       val schemaPaths = files.row(schemaName);
+      log.info("schema {}", schema);
+      log.info("schemaPaths {}", schemaPaths);
 
       for (val entry : schemaPaths.entrySet()) {
         val projectName = entry.getKey();
         val schemaProjectPaths = entry.getValue();
         val schemaProjectTask = new StageFileSchemaProjectTask(schema, projectName, schemaProjectPaths);
-
+        log.info("projectName {}, schemaProjectPaths {}", projectName, schemaProjectPaths);
         log.info("[{}] Submitting task '{}'...", taskCount++, schemaProjectTask.getName());
         schemaProjectTasks.add(schemaProjectTask);
       }

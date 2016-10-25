@@ -75,6 +75,7 @@ public class DefaultTaskContext implements TaskContext {
   @Override
   @SneakyThrows
   public boolean exists(FileType fileType) {
+    log.info("bwalsh says the path is ... {} exists ... {} ",getPath(fileType), fileSystem.exists(new Path(getPath(fileType)))) ;
     return fileSystem.exists(new Path(getPath(fileType)));
   }
 

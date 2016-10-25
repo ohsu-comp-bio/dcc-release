@@ -57,11 +57,12 @@ public class SubmissionFileSystem {
   public Table<String, String, List<Path>> getFiles(String releaseDir, List<String> projectNames,
       List<SubmissionFileSchema> metadata) {
     val watch = createStarted();
-    log.info("Resolving submission files...");
+    log.info("Resolving submission files in releaseDir '{}'...", releaseDir);
 
     val table = TreeBasedTable.<String, String, List<Path>> create();
     val iterator = fileSystem.listFiles(new Path(releaseDir), true);
 
+    int found = 0;
     while (iterator.hasNext()) {
       val status = iterator.next();
       val path = status.getPath();
@@ -69,6 +70,8 @@ public class SubmissionFileSystem {
       for (val schema : metadata) {
         val name = path.getName();
         if (name.matches(schema.getPattern())) {
+          found++;
+          log.info("add file {} for pattern {}.", name, schema.getPattern());
           addFile(projectNames, schema, path, table);
         }
       }
@@ -83,12 +86,12 @@ public class SubmissionFileSystem {
     val schemaName = schema.getName();
     val projectName = path.getParent().getName();
     if (isTestProject(projectName)) {
-      // Skip test projects
+      log.info("Skip test projects {}", projectName);
       return;
     }
 
     if (!projectNames.contains(projectName)) {
-      // Skip unspecified projects
+      log.info("Skip unspecified projects projectName={} projectNames={}",projectName,projectNames);
       return;
     }
 
