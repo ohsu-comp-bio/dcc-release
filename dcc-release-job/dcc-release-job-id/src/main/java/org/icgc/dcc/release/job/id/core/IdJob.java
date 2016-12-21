@@ -19,13 +19,14 @@ package org.icgc.dcc.release.job.id.core;
 
 import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.isNullOrEmpty;
+
 import lombok.NonNull;
 import lombok.val;
 import lombok.extern.slf4j.Slf4j;
 
 import org.icgc.dcc.id.client.core.IdClientFactory;
 import org.icgc.dcc.id.client.http.HttpIdClient;
-import org.icgc.dcc.id.client.http.HttpIdClient.Config;
+import org.icgc.dcc.id.client.http.webclient.WebClientConfig;
 import org.icgc.dcc.release.core.job.FileType;
 import org.icgc.dcc.release.core.job.GenericJob;
 import org.icgc.dcc.release.core.job.JobContext;
@@ -102,8 +103,8 @@ public class IdJob extends GenericJob {
     return isNullOrEmpty(identifierClassName) ? HttpIdClient.class.getName() : identifierClassName;
   }
 
-  private static Config createConfig(String release, IdProperties identifierProperties) {
-    val builder = Config.builder()
+  private static WebClientConfig createConfig(String release, IdProperties identifierProperties) {
+    val builder = WebClientConfig.builder()
         .serviceUrl(identifierProperties.getUrl())
         .release(release)
         .authToken(resolveToken(identifierProperties))
