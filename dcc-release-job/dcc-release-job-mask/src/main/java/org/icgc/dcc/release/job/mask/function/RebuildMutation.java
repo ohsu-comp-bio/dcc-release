@@ -21,13 +21,16 @@ import static com.google.common.base.Joiner.on;
 import static org.icgc.dcc.common.core.model.FieldNames.NormalizerFieldNames.NORMALIZER_MUTATION;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_MUTATED_FROM_ALLELE;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_MUTATED_TO_ALLELE;
+
 import lombok.val;
+import lombok.extern.slf4j.Slf4j;
 
 import org.apache.spark.api.java.function.Function;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Joiner;
 
+@Slf4j
 public class RebuildMutation implements Function<ObjectNode, ObjectNode> {
 
   /**

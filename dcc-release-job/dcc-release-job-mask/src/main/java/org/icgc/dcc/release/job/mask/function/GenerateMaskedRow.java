@@ -50,7 +50,7 @@ public class GenerateMaskedRow implements FlatMapFunction<ObjectNode, ObjectNode
     // https://wiki.oicr.on.ca/display/DCCSOFT/Data+Normalizer+Component?focusedCommentId=53182773#comment-53182773)
 
     val rows = Lists.<ObjectNode> newArrayList();
-    rows.add(row);
+//    rows.add(row);
 
     if (getMarkingState(row) == CONTROLLED) {
       val referenceGenomeAllele = row.get(SUBMISSION_OBSERVATION_REFERENCE_GENOME_ALLELE).textValue();
