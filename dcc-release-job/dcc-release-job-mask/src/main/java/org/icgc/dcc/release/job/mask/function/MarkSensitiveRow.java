@@ -43,6 +43,8 @@ import com.google.common.base.Splitter;
 public class MarkSensitiveRow implements Function<ObjectNode, ObjectNode> {
 
   private static final Splitter ALLELES_SPLITTER = Splitter.on("/");
+  // Pass Non-matched data
+  private static final String NONMATCHED_VALUE = null;
 
   @Override
   public ObjectNode call(ObjectNode row) throws Exception {
@@ -55,11 +57,7 @@ public class MarkSensitiveRow implements Function<ObjectNode, ObjectNode> {
     // Mark if applicable
     final Marking masking;
 
-    // Pass Non-matched data
-    private final static String NONMATCHED_VALUE = null;
-
-    if (controlGenotype == NONMATCHED_VALUE || tumourGenotype == NONMATCHED_VALUE 
-	|| mutatedFromAllele == NONMATCHED_VALUE) {
+    if (controlGenotype == NONMATCHED_VALUE || tumourGenotype == NONMATCHED_VALUE || mutatedFromAllele == NONMATCHED_VALUE) {
 
       log.debug("Marking row without control data: '{}'", row);
       masking = CONTROLLED;
