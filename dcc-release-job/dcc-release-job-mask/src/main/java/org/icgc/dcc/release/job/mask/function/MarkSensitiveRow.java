@@ -22,6 +22,7 @@ import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.icgc.dcc.common.core.model.FieldNames.NormalizerFieldNames.NORMALIZER_MARKING;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_CONTROL_GENOTYPE;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_MUTATED_TO_ALLELE;
+import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_MUTATED_FROM_ALLELE;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_REFERENCE_GENOME_ALLELE;
 import static org.icgc.dcc.common.core.model.FieldNames.SubmissionFieldNames.SUBMISSION_OBSERVATION_TUMOUR_GENOTYPE;
 import static org.icgc.dcc.common.core.model.Marking.CONTROLLED;
@@ -42,6 +43,8 @@ import com.google.common.base.Splitter;
 public class MarkSensitiveRow implements Function<ObjectNode, ObjectNode> {
 
   private static final Splitter ALLELES_SPLITTER = Splitter.on("/");
+  // Pass Non-matched data
+  private static final String NONMATCHED_VALUE = null;
 
   @Override
   public ObjectNode call(ObjectNode row) throws Exception {
@@ -49,10 +52,17 @@ public class MarkSensitiveRow implements Function<ObjectNode, ObjectNode> {
     val controlGenotype = row.get(SUBMISSION_OBSERVATION_CONTROL_GENOTYPE).textValue();
     val tumourGenotype = row.get(SUBMISSION_OBSERVATION_TUMOUR_GENOTYPE).textValue();
     val mutatedToAllele = row.get(SUBMISSION_OBSERVATION_MUTATED_TO_ALLELE).textValue();
+    val mutatedFromAllele = row.get(SUBMISSION_OBSERVATION_MUTATED_FROM_ALLELE).textValue();
 
     // Mark if applicable
     final Marking masking;
-    if (!matchesAllControlAlleles(referenceGenomeAllele, controlGenotype)
+
+    if (controlGenotype == NONMATCHED_VALUE || tumourGenotype == NONMATCHED_VALUE || mutatedFromAllele == NONMATCHED_VALUE) {
+
+      log.debug("Marking row without control data: '{}'", row);
+      masking = CONTROLLED;
+
+    } else if (!matchesAllControlAlleles(referenceGenomeAllele, controlGenotype)
         || !matchesAllTumourAllelesButTo(referenceGenomeAllele, tumourGenotype, mutatedToAllele)) {
 
       log.debug("Marking sensitive row: '{}'", row); // Should be rare enough
