@@ -54,7 +54,12 @@ public class MarkSensitiveRow implements Function<ObjectNode, ObjectNode> {
 
     // Mark if applicable
     final Marking masking;
-    if (controlGenotype == null || tumourGenotype == null || mutatedFromAllele == null) {
+
+    // Pass Non-matched data
+    private final static String NONMATCHED_VALUE = null;
+
+    if (controlGenotype == NONMATCHED_VALUE || tumourGenotype == NONMATCHED_VALUE 
+	|| mutatedFromAllele == NONMATCHED_VALUE) {
 
       log.debug("Marking row without control data: '{}'", row);
       masking = CONTROLLED;
